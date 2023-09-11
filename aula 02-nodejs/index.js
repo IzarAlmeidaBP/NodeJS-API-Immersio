@@ -1,4 +1,4 @@
-/*
+/* 
 0- Obter um usuário
 1- Obter o número de telefone do usuário a partir de seu Id
 2- Obter o endereço do usuário pelo Id
@@ -43,6 +43,30 @@ function obterEndereco(idUsuario, callback) {
   }, 2000);
 }
 
+//1o passo adicionar a palavra async -> automaticamente ela retornará uma Promisse
+main();
+async function main() {
+  try {
+    console.time('medida-promise');
+    const usuario = await obterUsuario();
+    const resultado = await Promise.all([
+      obterTelefone(usuario.id),
+      obterEnderecoAsync(usuario.id),
+    ]);
+    const telefone = resultado[0];
+    const endereco = resultado[1];
+    console.log(`
+    Nome: ${usuario.nome}
+    Endereco: ${endereco.rua}, ${endereco.numero}
+    Telefone : ${telefone.ddd}, ${telefone.telefone}
+    `);
+    console.timeEnd('medida-promise');
+  } catch (error) {
+    console.error('Deu Ruim', error);
+  }
+}
+
+/* 
 const usuarioPromise = obterUsuario();
 //Para manipular o sucesso usamos a função .then
 //Para manipular o erro usamos a o  .catch
@@ -78,3 +102,4 @@ usuarioPromise
   .catch(function (error) {
     console.error('Deu Ruim', error);
   });
+  */
